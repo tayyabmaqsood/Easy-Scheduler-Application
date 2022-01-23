@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Parental Control Application</string>
+    <string-array name="userTypeArray">
+        <item>Select</item>
+        <item>Admin</item>
+        <item>Parent</item>
+        <item>Child</item>
+    </string-array>
 </resources>
