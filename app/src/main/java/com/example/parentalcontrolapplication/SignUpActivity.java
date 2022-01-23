@@ -7,10 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    EditText usernameEditText;
+    EditText emailEditText;
+    EditText passwordEditText;
+    TextView usertypeTextview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,5 +43,13 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
 
+    }
+
+    public void registerNewUser(View view) {
+         usernameEditText = findViewById(R.id.editTextUsername);
+         emailEditText = findViewById(R.id.editTextEmailAddress);
+         passwordEditText = findViewById(R.id.editTextPassword);
+         usertypeTextview = findViewById(R.id.userTypeTextview);
+         User usr = new User(usernameEditText.getText().toString(), emailEditText.getText().toString(),passwordEditText.getText().toString());
     }
 }
