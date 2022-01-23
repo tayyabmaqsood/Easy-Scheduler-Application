@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "656508641132",
+    "project_id": "parental-control-applica-de957",
+    "storage_bucket": "parental-control-applica-de957.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:656508641132:android:d42a583b5f2a4d13bc5d49",
+        "android_client_info": {
+          "package_name": "com.example.parentalcontrolapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "656508641132-7bk1flp3a19ft6gr9jpcp810pajiugv6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6LJoDgP8UmhAErCTbwgW1hOuIVl6GDR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "656508641132-7bk1flp3a19ft6gr9jpcp810pajiugv6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
