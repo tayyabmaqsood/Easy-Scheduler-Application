@@ -3,9 +3,11 @@ package com.example.parentalcontrolapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -19,6 +21,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,8 +83,31 @@ public class MainActivity extends AppCompatActivity  {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                progressDialog.dismiss();
-                                Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+
+                                //Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                                DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
+                                Query getUser =   reference.orderByChild("email").equalTo(email);
+                                getUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if(snapshot.exists()){
+
+                                            String userType =  snapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userType").getValue(String.class);
+                                            if(userType.equals("Admin")) {
+                                                progressDialog.dismiss();
+                                                startActivity(new Intent(MainActivity.this, AdminActivity.class));
+                                            }
+                                            else if(userType.equals("Parent"))
+                                                startActivity(new Intent(MainActivity.this,AdminActivity.class));
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(MainActivity.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                             else{
                                 progressDialog.dismiss();
