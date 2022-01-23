@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParentalControlApplication">
         <activity
+            android:name=".ForgetPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
