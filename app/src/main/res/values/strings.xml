@@ -6,4 +6,10 @@
         <item>Parent</item>
 
     </string-array>
+    <string-array name="genderArray">
+        <item>Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Other</item>
+    </string-array>
 </resources>

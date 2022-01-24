@@ -10,10 +10,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ParentalControlApplication">
         <activity
+            android:name=".ParentsActivity"
+            android:exported="false" />
+        <activity
             android:name=".AdminActivity"
             android:exported="false" />
         <activity
-            android:name=".ParentsActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".ForgetPasswordActivity"
@@ -22,7 +25,7 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".registerChild"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

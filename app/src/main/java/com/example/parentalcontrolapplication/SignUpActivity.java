@@ -45,7 +45,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        usernameEditText = findViewById(R.id.editTextUsername);
+        usernameEditText = findViewById(R.id.editTextChildname);
         emailEditText = findViewById(R.id.editTextEmailAddress);
         passwordEditText = findViewById(R.id.editTextTextPassword);
         usertypeTextview = findViewById(R.id.userTypeTextview);
