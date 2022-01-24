@@ -1,35 +1,33 @@
 package com.example.parentalcontrolapplication;
 
 public class User {
-    public User(String username, String email, String password) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
 
-    public User(int id, String username, String email, String password) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-    }
-    public User(String username, String email, String password, String userType) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.userType = userType;
-    }
+    public User(){}
 
     public User(String email, String password) {
         this.email = email;
         this.password = password;
     }
 
-    public int getId() {
+    public User(String username, String email, String password, String usertype) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.userType = usertype;
+    }
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,8 +74,15 @@ public class User {
     }
 
 
+    public User(String id, String username, String email, String password, String userType) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+    }
 
-    private int id;
+    private String id;
     private String username;
     private String email;
     private String password;
