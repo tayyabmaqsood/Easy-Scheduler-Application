@@ -65,7 +65,6 @@
                 android:paddingRight="20dp"
                 android:paddingBottom="13dp"
                 android:hint="Age"
-                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:inputType="numberDecimal"
                 app:layout_constraintTop_toBottomOf="@+id/editTextChildName" />
@@ -86,7 +85,6 @@
                 app:layout_constraintStart_toEndOf="@+id/editTextChildAge"
                 app:layout_constraintTop_toBottomOf="@+id/editTextChildName" />
 
-
             <Button
                 android:id="@+id/childDOB"
                 android:layout_width="match_parent"
@@ -96,26 +94,40 @@
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/input_bg"
                 android:onClick="openDatePicker"
-
                 android:text="Date Of Birth"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTextChildAge" />
+            
+            <Button
+                android:id="@+id/childActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:background="@drawable/input_bg"
+                android:text="Add Activities"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/childDOB" />
 
             <Button
-                android:id="@+id/loginBtn"
+                android:id="@+id/childRegisterBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/input_bg"
                 android:text="Register"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:layout_editor_absoluteY="456dp" />
+                app:layout_constraintTop_toBottomOf="@+id/childActivities" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
