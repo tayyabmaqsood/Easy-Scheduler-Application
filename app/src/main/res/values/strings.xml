@@ -12,4 +12,11 @@
         <item>Female</item>
         <item>Other</item>
     </string-array>
+
+    <string-array name="childActivities">
+        <item>Select Activity For Your Child</item>
+        <item>Exercise</item>
+        <item>Eat</item>
+        <item>Other</item>
+    </string-array>
 </resources>

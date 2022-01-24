@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -18,6 +21,7 @@ public class registerChild extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
+    private Button dateDialogButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,12 @@ public class registerChild extends AppCompatActivity {
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 month+=1;
                 String date = makeDateString(day,month,year);
-                dateButton.setText(date);
+                if (dateDialogButton != null){
+                   if (dateDialogButton.getText().equals("Select Date"))
+                       dateDialogButton.setText(date);
+                }
+                else
+                    dateButton.setText(date);
             }
         };
         Calendar calendar = Calendar.getInstance();
@@ -95,4 +104,90 @@ public class registerChild extends AppCompatActivity {
         datePickerDialog.show();
     }
 
+
+    // <=================== Other Than Date Picker=======================
+        //<============= ADD Activities Function    ====================
+    public void addActivitiesForChild(View view) {
+        String activityName;
+
+        Dialog dialog = new Dialog(registerChild.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.child_activities);
+
+        //Activity Selection Spinner
+        Spinner spinner =  dialog.findViewById(R.id.childActivitySelection);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.childActivities, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+
+        //Description, Date, Time
+        EditText description = dialog.findViewById(R.id.childActivityDescription);
+        Button date = dialog.findViewById(R.id.childActivityDate);
+        Button time = dialog.findViewById(R.id.childActivityTime);
+
+
+        Button cancelBtn = dialog.findViewById(R.id.cancelRegisterActivity);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                dateDialogButton = null;
+            }
+        });
+
+        dateDialogButton = dialog.findViewById(R.id.childActivityDate);
+        dateDialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                datePickerDialog.show();
+            }
+        });
+
+        Button addChildActivity = dialog.findViewById(R.id.addChildActivity);
+        addChildActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(spinner.getSelectedItemId() == 0){
+                }
+                else if(description.getText().length() == 0) {
+                    description.setError("Enter valid description");
+                    description.requestFocus();
+                }
+                else if(date.getText().equals("Select Date")){
+                    date.setError("Select Date");
+                    date.requestFocus();
+                }
+                else if(time.getText().equals("")){
+//                    time.setError("Select Time");
+//                    time.requestFocus();
+                }else {
+                    Toast.makeText(registerChild.this, "Activity Added", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+
+            }
+        });
+
+        dialog.show();
+
+
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
