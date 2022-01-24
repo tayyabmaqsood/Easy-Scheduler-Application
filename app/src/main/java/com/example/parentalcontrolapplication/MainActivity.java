@@ -78,13 +78,14 @@ public class MainActivity extends AppCompatActivity  {
             progressDialog.setTitle("Login");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
+            //      <====== SignIn with email and password  ===>
             mAuth.signInWithEmailAndPassword(email,password)
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
 
-                                //Toast.makeText(MainActivity.this, "Login Successful", Toast.LENGTH_LONG).show();
+                                //      <=====  Login is Successful then add UserRoll   ===>
                                 DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
                                 Query getUser =   reference.orderByChild("email").equalTo(email);
                                 getUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -99,7 +100,6 @@ public class MainActivity extends AppCompatActivity  {
                                             }
                                             else if(userType.equals("Parent"))
                                                 startActivity(new Intent(MainActivity.this,AdminActivity.class));
-
                                         }
                                     }
 
