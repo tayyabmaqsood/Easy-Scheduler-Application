@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity  {
                                                 startActivity(new Intent(MainActivity.this, AdminActivity.class));
                                             }
                                             else if(userType.equals("Parent"))
-                                                startActivity(new Intent(MainActivity.this,AdminActivity.class));
+                                                startActivity(new Intent(MainActivity.this,ParentsActivity.class));
                                         }
                                     }
 
