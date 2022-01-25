@@ -1,15 +1,14 @@
 package com.example.parentalcontrolapplication;
 
+import android.widget.ArrayAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Child {
-    private String parentsId;
 
-    public String getParentsId() {
-        return parentsId;
-    }
 
-    public void setParentsId(String parentsId) {
-        this.parentsId = parentsId;
-    }
+
 
     public String getChildName() {
         return childName;
@@ -43,38 +42,7 @@ public class Child {
         this.childDOB = childDOB;
     }
 
-
-    public String getChildActivity() {
-        return childActivity;
-    }
-
-    public void setChildActivity(String childActivity) {
-        this.childActivity = childActivity;
-    }
-
-    public String getActivityTime() {
-        return activityTime;
-    }
-
-    public void setActivityTime(String activityTime) {
-        this.activityTime = activityTime;
-    }
-
-    public String getActivityDate() {
-        return activityDate;
-    }
-
-    public void setActivityDate(String activityDate) {
-        this.activityDate = activityDate;
-    }
-
-    public String getActivityDescription() {
-        return activityDescription;
-    }
-
-    public void setActivityDescription(String activityDescription) {
-        this.activityDescription = activityDescription;
-    }
+    public Child(){}
 
     public String getParentId() {
         return parentId;
@@ -84,12 +52,44 @@ public class Child {
         this.parentId = parentId;
     }
 
+
+
+
+
+
+
+
+
+
+    public List<ChildActivities> getActivities() {
+        return activities;
+    }
+
+    public void setActivities(List<ChildActivities> activities) {
+        this.activities = activities;
+    }
+
     private String childName;
     private String childAge;
     private String childDOB;
-    private String childActivity;
-    private String activityTime;
-    private String activityDate;
-    private String activityDescription;
     private String parentId;
+    private String childGender;
+    private List<ChildActivities>activities =  new ArrayList<ChildActivities>();
+
+    public Child(String childName, String childAge, String childDOB,  String childGender, String parentId, List<ChildActivities> activities) {
+        this.childName = childName;
+        this.childAge = childAge;
+        this.childDOB = childDOB;
+        this.parentId = parentId;
+        this.childGender = childGender;
+        this.activities = activities;
+    }
+
+    public String getChildGender() {
+        return childGender;
+    }
+
+    public void setChildGender(String childGender) {
+        this.childGender = childGender;
+    }
 }

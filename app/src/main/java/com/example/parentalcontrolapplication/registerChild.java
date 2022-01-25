@@ -1,40 +1,77 @@
 package com.example.parentalcontrolapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class registerChild extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private Button dateButton;
     private Button dateDialogButton;
+    private ListView listView;
+    private Spinner spinner;
+    int t1Houre;
+    int  t1Minute;
+
+
+    private List<ChildActivities> childActivitiesList = new ArrayList<ChildActivities>();
+    ArrayAdapter<ChildActivities> activitiesAdpater;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_child);
 
-        Spinner spinner = (Spinner) findViewById(R.id.childGanderSpinner);
+        spinner = (Spinner) findViewById(R.id.childGanderSpinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.genderArray, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
         initDatePicker();
         dateButton = (Button) findViewById(R.id.childDOB);
+        listView = findViewById(R.id.activitiesListView);
+        activitiesAdpater = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_list_item_1,childActivitiesList);
+        listView.setAdapter(activitiesAdpater);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                childActivitiesList.remove(i);
+                Toast.makeText(registerChild.this, "Activity Deleted", Toast.LENGTH_SHORT).show();
+                activitiesAdpater.notifyDataSetChanged();
+                return false;
+            }
+        });
     }
 
     //  <=== Date Picker functions  ===>
@@ -109,23 +146,48 @@ public class registerChild extends AppCompatActivity {
         //<============= ADD Activities Function    ====================
     public void addActivitiesForChild(View view) {
         String activityName;
-
         Dialog dialog = new Dialog(registerChild.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.child_activities);
 
+        Button timePickerBtn = dialog.findViewById(R.id.childActivityTime);
+
         //Activity Selection Spinner
-        Spinner spinner =  dialog.findViewById(R.id.childActivitySelection);
+        Spinner spinnerActivityName =  dialog.findViewById(R.id.childActivitySelection);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.childActivities, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
+        spinnerActivityName.setAdapter(adapter);
 
         //Description, Date, Time
         EditText description = dialog.findViewById(R.id.childActivityDescription);
         Button date = dialog.findViewById(R.id.childActivityDate);
         Button time = dialog.findViewById(R.id.childActivityTime);
 
+        //<=================== Time Picker Code
+        timePickerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        registerChild.this,
+                        new TimePickerDialog.OnTimeSetListener() {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                                t1Houre = i;
+                                t1Minute = i1;
+
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(0,0,0,t1Houre,t1Minute);
+                                timePickerBtn.setText(DateFormat.format("hh:mm aa",calendar));
+                            }
+                        },12,0,false
+
+                );
+                timePickerDialog.updateTime(t1Houre,t1Minute);
+                timePickerDialog.show();
+            }
+        });
 
         Button cancelBtn = dialog.findViewById(R.id.cancelRegisterActivity);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -147,8 +209,9 @@ public class registerChild extends AppCompatActivity {
         Button addChildActivity = dialog.findViewById(R.id.addChildActivity);
         addChildActivity.setOnClickListener(new View.OnClickListener() {
             @Override
+
             public void onClick(View view) {
-                if(spinner.getSelectedItemId() == 0){
+                if(spinnerActivityName.getSelectedItemId() == 0){
                 }
                 else if(description.getText().length() == 0) {
                     description.setError("Enter valid description");
@@ -158,12 +221,23 @@ public class registerChild extends AppCompatActivity {
                     date.setError("Select Date");
                     date.requestFocus();
                 }
-                else if(time.getText().equals("")){
-//                    time.setError("Select Time");
-//                    time.requestFocus();
-                }else {
-                    Toast.makeText(registerChild.this, "Activity Added", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
+                else if(time.getText().equals("Select Time")){
+                    time.setError("Select Time");
+                    time.requestFocus();
+                }
+                  else {
+                        ChildActivities childActivity = new ChildActivities();
+                        String ActivityName = spinnerActivityName.getSelectedItem().toString();
+                        String desc = description.getText().toString();
+                        String ActivityDate = date.getText().toString();
+                        String ActivityTime = time.getText().toString();
+                        childActivity.setActivityDate(ActivityDate);
+                        childActivity.setActivityTime(ActivityTime);
+                        childActivity.setActivityDescription(desc);
+                        childActivity.setChildActivityName(ActivityName);
+                        childActivitiesList.add(childActivity);
+                        activitiesAdpater.notifyDataSetChanged();
+                        dialog.dismiss();
                 }
 
             }
@@ -172,6 +246,59 @@ public class registerChild extends AppCompatActivity {
         dialog.show();
 
 
+    }
+
+
+    public void registerNewKid(View view) {
+        EditText childName = findViewById(R.id.editTextChildNameReg);
+        EditText childAge = findViewById(R.id.editTextChildAge);
+        String childGender = spinner.getSelectedItem().toString();
+        Button childDOB = findViewById(R.id.childDOB);
+        addChildNameToChildActivities(childName.getText().toString());
+        String parentId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        ProgressDialog progressDialog = new ProgressDialog(registerChild.this);
+        progressDialog.setMessage("Please Wait Registration...");
+        progressDialog.setTitle("Registration");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        Child child = new Child(childName.getText().toString(),
+                childAge.getText().toString(),
+                childDOB.getText().toString(),
+                childGender,
+                parentId,
+                childActivitiesList);
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("Kids")
+                .child(child.getParentId() + child.getChildName());
+
+        reference.setValue(child).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()) {
+                    for (int i = 0; i < childActivitiesList.size(); i++)
+                        reference.child("activities").setValue(childActivitiesList.get(i));
+                    progressDialog.dismiss();
+                    Toast.makeText(registerChild.this, "Kid info is successFully added", Toast.LENGTH_LONG).show();
+                    finish();
+                }else {
+                    if (progressDialog.isShowing())
+                        progressDialog.dismiss();
+                    Toast.makeText(registerChild.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                    finish();
+                }
+
+            }
+        });
+
+
+
+    }
+
+    private void addChildNameToChildActivities(String name) {
+       for (int i = 0; i<childActivitiesList.size();i++)
+           childActivitiesList.get(i).setChildName(name);
     }
 }
 

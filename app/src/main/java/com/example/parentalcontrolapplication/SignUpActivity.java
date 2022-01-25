@@ -127,7 +127,6 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                                             startActivity(new Intent(SignUpActivity.this,MainActivity.class));
                                         }
                                         else{
-                                            Log.d("Adding User other item",task.getException().getMessage().toString());
                                             if(progressDialog.isShowing())
                                                 progressDialog.dismiss();
                                         }

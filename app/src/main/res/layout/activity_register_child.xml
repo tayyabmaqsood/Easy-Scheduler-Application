@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/editTextChildName"
+                android:id="@+id/editTextChildNameReg"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="24dp"
@@ -60,14 +60,14 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/input_bg"
+                android:hint="Age"
+                android:inputType="numberDecimal"
                 android:paddingLeft="20dp"
                 android:paddingTop="13dp"
                 android:paddingRight="20dp"
                 android:paddingBottom="13dp"
-                android:hint="Age"
                 app:layout_constraintStart_toStartOf="parent"
-                android:inputType="numberDecimal"
-                app:layout_constraintTop_toBottomOf="@+id/editTextChildName" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextChildNameReg" />
 
             <Spinner
                 android:id="@+id/childGanderSpinner"
@@ -83,7 +83,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/editTextChildAge"
-                app:layout_constraintTop_toBottomOf="@+id/editTextChildName" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextChildNameReg" />
 
             <Button
                 android:id="@+id/childDOB"
@@ -95,6 +95,9 @@
                 android:background="@drawable/input_bg"
                 android:onClick="openDatePicker"
                 android:text="Date Of Birth"
+                android:drawableLeft="@drawable/ic_baseline_date_range_24"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,12 +126,28 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/input_bg"
+                android:onClick="registerNewKid"
                 android:text="Register"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/childActivities" />
+
+            <ListView
+                android:id="@+id/activitiesListView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="24dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/childRegisterBtn" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
