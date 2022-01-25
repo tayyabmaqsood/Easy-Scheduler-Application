@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity  {
             passwordEditText.requestFocus();
         }
         else{
-            progressDialog.setMessage("Please Wait While Login...");
+            progressDialog.setMessage("Please Wait...");
             progressDialog.setTitle("Login");
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();

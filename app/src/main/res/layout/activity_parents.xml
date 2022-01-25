@@ -87,11 +87,12 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="56dp"
         android:background="@drawable/input_bg"
+        android:onClick="addNewChild"
         android:paddingLeft="18dp"
         android:paddingTop="10dp"
         android:paddingRight="18dp"
         android:paddingBottom="10dp"
-        android:text="New Child"
+        android:text="New Kid"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -109,7 +110,7 @@
         android:paddingRight="18dp"
 
         android:paddingBottom="10dp"
-        android:text="Edit Child"
+        android:text="Edit Kid"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

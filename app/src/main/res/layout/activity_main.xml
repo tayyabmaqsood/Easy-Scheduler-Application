@@ -87,7 +87,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:onClick="forgetPassword"
-                android:text="forget password?"
+                android:text="forgot password?"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -3,8 +3,10 @@ package com.example.parentalcontrolapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,5 +46,9 @@ public class ParentsActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void addNewChild(View view) {
+        startActivity(new Intent(this,registerChild.class));
     }
 }
