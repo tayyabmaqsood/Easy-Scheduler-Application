@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,7 +26,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-public class ChlidActionActivity extends AppCompatActivity {
+public class ChlidActionActivity extends AppCompatActivity implements  childActionSelectListner  {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -44,7 +47,7 @@ public class ChlidActionActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager( new LinearLayoutManager(this));
         childActionActivities = new ArrayList<>();
-        adapter = new ChlidActionsAdapter(childActionActivities,this);
+        adapter = new ChlidActionsAdapter(childActionActivities,this,this);
         recyclerView.setAdapter(adapter);
 
 
@@ -100,29 +103,50 @@ public class ChlidActionActivity extends AppCompatActivity {
     }
 
     public void showAllActivities(View view){
+        RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
+        todoActivity.setBackgroundColor(getResources().getColor(R.color.whiteshade));
+        RelativeLayout carcard = findViewById(R.id.todaysAcativityCardView);
+        carcard.setBackgroundColor(Color.TRANSPARENT);
+        RelativeLayout restcard = findViewById(R.id.completedActivitiesCardView);
+        restcard.setBackgroundColor(Color.TRANSPARENT);
 
         randomList.clear();
         randomList = getActivitiesToDo();
-        adapterRandom = new ChlidActionsAdapter(randomList,this);
+        adapterRandom = new ChlidActionsAdapter(randomList,this,this);
         recyclerView.setAdapter(adapterRandom);
 
     }
 
     public void completedActivities(View view) {
 
+        RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
+        todoActivity.setBackgroundColor(Color.TRANSPARENT);
+        RelativeLayout carcard = findViewById(R.id.todaysAcativityCardView);
+        carcard.setBackgroundColor(Color.TRANSPARENT);
+        RelativeLayout restcard = findViewById(R.id.completedActivitiesCardView);
+        restcard.setBackgroundColor(getResources().getColor(R.color.whiteshade));
+
+
         randomList.clear();
         randomList = getCompletedActivities();
-        adapterRandom = new ChlidActionsAdapter(randomList,this);
+        adapterRandom = new ChlidActionsAdapter(randomList,this,this);
         recyclerView.setAdapter(adapterRandom);
 
     }
 
 
     public void todaysActivity(View view) {
+        RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
+        todoActivity.setBackgroundColor(Color.TRANSPARENT);
+        RelativeLayout carcard = findViewById(R.id.todaysAcativityCardView);
+        carcard.setBackgroundColor(getResources().getColor(R.color.whiteshade));;
+        RelativeLayout restcard = findViewById(R.id.completedActivitiesCardView);
+        restcard.setBackgroundColor(Color.TRANSPARENT);
+
 
         randomList.clear();
         randomList = getTodaysActivities();
-        adapterRandom = new ChlidActionsAdapter(randomList,this);
+        adapterRandom = new ChlidActionsAdapter(randomList,this,this);
         recyclerView.setAdapter(adapterRandom);    }
 
 
@@ -160,4 +184,30 @@ public class ChlidActionActivity extends AppCompatActivity {
         return list;
     }
 
+
+    // Double Select item from recycler view
+    private String clickedEmail = "";
+    private int itemClicked = 0;
+    @Override
+    public void onItemClicked(ChildActivities activity) {
+        if (clickedEmail.equals(activity.getChildEmail())) {
+            itemClicked++;
+            if(itemClicked == 2) {
+
+                Toast.makeText(this, "double click", Toast.LENGTH_SHORT).show();
+                itemClicked = 0;
+                clickedEmail = "";
+            }
+        }
+        else {
+            clickedEmail = activity.getChildEmail();
+            itemClicked = 1;
+        }
+
+    }
+
+    @Override
+    public void onItemLongClicked(ChildActivities activity) {
+        Toast.makeText(this, "multiple time click", Toast.LENGTH_SHORT).show();
+    }
 }
