@@ -30,7 +30,6 @@ import java.util.Locale;
 
 public class ParentsActivity extends AppCompatActivity {
 
-    TextView userRole;
     TextView userName;
     RecyclerView recyclerView;
     RecyclerView.Adapter adapterCh;
@@ -39,7 +38,7 @@ public class ParentsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_parents);
-        userRole = findViewById(R.id.showParentUserRole);
+
         userName = findViewById(R.id.showParentUsername);
         User user = new User();
 
@@ -47,7 +46,7 @@ public class ParentsActivity extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userRole.setText(snapshot.child("username").getValue().toString());
+
                 userName.setText(snapshot.child("username").getValue().toString());
                 user.setUsername(snapshot.child("username").getValue().toString());
                 user.setEmail(snapshot.child("email").getValue().toString());
