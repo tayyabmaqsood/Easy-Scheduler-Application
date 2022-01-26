@@ -288,7 +288,6 @@ public class registerChild extends AppCompatActivity {
                     Toast.makeText(registerChild.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     finish();
                 }
-
             }
         });
 

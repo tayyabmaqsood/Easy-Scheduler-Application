@@ -7,6 +7,7 @@ public class ChildActivities {
     private String activityDate;
     private String activityDescription;
     private String childName;
+    ChildActivities(){}
 
     @Override
     public String toString() {
