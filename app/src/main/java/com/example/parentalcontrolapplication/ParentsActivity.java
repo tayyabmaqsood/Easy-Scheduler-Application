@@ -32,6 +32,9 @@ public class ParentsActivity extends AppCompatActivity {
 
     TextView userRole;
     TextView userName;
+    RecyclerView recyclerView;
+    RecyclerView.Adapter adapterCh;
+    List<Child> childList = new ArrayList<Child>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +67,57 @@ public class ParentsActivity extends AppCompatActivity {
     }
 
     public void showPersonInfo(View view) {
+        Dialog dialog = new Dialog(ParentsActivity.this, android.R.style.Widget_DeviceDefault);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.showallchild_activities);
 
+
+        recyclerView = (RecyclerView) dialog.findViewById(R.id.showAllChildActivitiesRecyclerView);
+        // means every item of recyclerview has fixed size
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager( new LinearLayoutManager(this));
+        adapterCh = new AllChildNameAdapter(childList,this);
+
+        DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                .getReference("Kids");
+        reference.orderByChild("parentId").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid())
+        .addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                childList.clear();
+                Iterator shots = snapshot.getChildren().iterator();
+                while (shots.hasNext()) {
+
+                    DataSnapshot singleShot = (DataSnapshot) shots.next();
+                    Child child = new Child();
+
+
+                    try {
+                            child.setChildName(singleShot.child("childName").getValue().toString());
+
+                            child.setChildGender(singleShot.child("childGender").getValue().toString());
+                            child.setChildDOB(singleShot.child("childDOB").getValue().toString());
+                            child.setChildAge(singleShot.child("childAge").getValue().toString());
+                            child.setParentId(singleShot.child("parentId").getValue().toString());
+                            Log.d("str",child.toString());
+                            childList.add(child);
+                            adapterCh = new AllChildNameAdapter(childList, ParentsActivity.this);
+                            recyclerView.setAdapter(adapterCh);
+                            adapterCh.notifyDataSetChanged();
+
+                    }catch (Exception e){ }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        dialog.show();
     }
 
     public void showAllChildActivities(View view) {

@@ -70,6 +70,18 @@ public class Child {
     }
 
     private String childName;
+
+    @Override
+    public String toString() {
+        return "Child{" +
+                "childName='" + childName + '\'' +
+                ", childAge='" + childAge + '\'' +
+                ", childDOB='" + childDOB + '\'' +
+                ", parentId='" + parentId + '\'' +
+                ", childGender='" + childGender + '\'' +
+                '}';
+    }
+
     private String childAge;
     private String childDOB;
     private String parentId;
