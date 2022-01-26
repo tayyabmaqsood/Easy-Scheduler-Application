@@ -8,18 +8,21 @@
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/drawable-v24/input_bg.xml" value="0.2203125" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.2203125" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/drawable/input_bg.xml" value="0.2203125" />
-        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_admin.xml" value="0.33" />
+        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_admin.xml" value="0.2" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_child_action.xml" value="0.1" />
+        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_chlid_action.xml" value="0.5" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_forget_password.xml" value="0.25" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_main.xml" value="0.25" />
-        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_parents.xml" value="0.18" />
+        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_parents.xml" value="0.14" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_register_child.xml" value="0.22752808988764045" />
-        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_sign_up.xml" value="0.25" />
+        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_sign_up.xml" value="0.18" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/activity_temp.xml" value="0.23964497041420119" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/admin_layout.xml" value="0.20241691842900303" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/appbar_layout.xml" value="0.25" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/child_activities.xml" value="0.25" />
+        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/childaction_custom_layout.xml" value="0.1" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/childs_activities.xml" value="0.20416666666666666" />
+        <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/chlidaction_custom_layout.xml" value="0.25" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/showactivity_layout.xml" value="0.22" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/showall_activities.xml" value="0.1" />
         <entry key="..\:/Pucit/Semester 07/mobile computing/Term Project2/app/src/main/res/layout/showallchild_activities.xml" value="0.16" />

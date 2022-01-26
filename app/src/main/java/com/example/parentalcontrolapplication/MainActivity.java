@@ -84,22 +84,25 @@ public class MainActivity extends AppCompatActivity  {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-
+                                final boolean[] isParent = {true};
                                 //      <=====  Login is Successful then add UserRoll   ===>
                                 DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Users");
                                 Query getUser =   reference.orderByChild("email").equalTo(email);
+
                                 getUser.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if(snapshot.exists()){
 
                                             String userType =  snapshot.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userType").getValue(String.class);
-                                            if(userType.equals("Admin")) {
-                                                progressDialog.dismiss();
-                                                startActivity(new Intent(MainActivity.this, AdminActivity.class));
-                                            }
-                                            else if(userType.equals("Parent"))
+                                             if(userType.equals("Parent"))
                                                 startActivity(new Intent(MainActivity.this,ParentsActivity.class));
+                                        }
+                                        else
+                                            isParent[0] = false;
+                                        if(!isParent[0]) {
+                                            progressDialog.dismiss();
+                                            startActivity(new Intent(MainActivity.this, ChlidActionActivity.class));
                                         }
                                     }
 

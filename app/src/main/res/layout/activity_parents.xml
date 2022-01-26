@@ -48,7 +48,7 @@
 
 
             <RelativeLayout
-                android:id="@+id/hotel_card"
+                android:id="@+id/allActivitiesCardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -83,7 +83,7 @@
             >
 
             <RelativeLayout
-                android:id="@+id/car_card"
+                android:id="@+id/todaysAcativityCardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -117,7 +117,7 @@
             >
 
             <RelativeLayout
-                android:id="@+id/rest_card"
+                android:id="@+id/completedActivitiesCardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
