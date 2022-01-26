@@ -156,7 +156,7 @@ public class ParentsActivity extends AppCompatActivity {
                             activity.setActivityDescription(value.get("activityDescription"));
                             activity.setActivityDate(value.get("activityDate"));
                             activity.setActivityTime(value.get("activityTime"));
-                            activity.setChildName(value.get("childName"));
+                            //activity.setChildName(value.get("childName"));
                             childActivities.add(activity);
                             adapter[0] = new AllChildActivitiesAdapter(childActivities, ParentsActivity.this);
                             recyclerView.setAdapter(adapter[0]);

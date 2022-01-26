@@ -6,26 +6,38 @@ public class ChildActivities {
     private String activityTime;
     private String activityDate;
     private String activityDescription;
-    private String childName;
-    ChildActivities(){}
+    private String childEmail;
+    private String activityStatus;
+
+    public String getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(String activityStatus) {
+        this.activityStatus = activityStatus;
+    }
+
+    public String getChildEmail() {
+        return childEmail;
+    }
+
+    public void setChildEmail(String childEmail) {
+        this.childEmail = childEmail;
+    }
 
     @Override
     public String toString() {
-        return
-                "childActivityName ='" + childActivityName + ' ' +
-                ", activityTime ='" + activityTime + ' ' +
-                ", activityDate ='" + activityDate + ' ' +
-                ", activityDescription ='" + activityDescription + ' '
-                ;
+        return "ChildActivities{" +
+                "childActivityName='" + childActivityName + '\'' +
+                ", activityTime='" + activityTime + '\'' +
+                ", activityDate='" + activityDate + '\'' +
+                ", activityDescription='" + activityDescription + '\'' +
+                ", childEmail='" + childEmail + '\'' +
+                '}';
     }
 
-    public String getChildName() {
-        return childName;
-    }
 
-    public void setChildName(String childName) {
-        this.childName = childName;
-    }
+    ChildActivities(){}
 
     public String getChildActivityName() {
         return childActivityName;

@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -189,6 +190,8 @@ public class registerChild extends AppCompatActivity {
             }
         });
 
+
+        // Cancel button click Listner
         Button cancelBtn = dialog.findViewById(R.id.cancelRegisterActivity);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,6 +201,7 @@ public class registerChild extends AppCompatActivity {
             }
         });
 
+        // Add Date chlid activity listner
         dateDialogButton = dialog.findViewById(R.id.childActivityDate);
         dateDialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,6 +210,8 @@ public class registerChild extends AppCompatActivity {
             }
         });
 
+
+        // Add chlid activities button listner
         Button addChildActivity = dialog.findViewById(R.id.addChildActivity);
         addChildActivity.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,11 +241,12 @@ public class registerChild extends AppCompatActivity {
                         childActivity.setActivityTime(ActivityTime);
                         childActivity.setActivityDescription(desc);
                         childActivity.setChildActivityName(ActivityName);
+                        childActivity.setActivityStatus("pending");
+
                         childActivitiesList.add(childActivity);
                         activitiesAdpater.notifyDataSetChanged();
                         dialog.dismiss();
                 }
-
             }
         });
 
@@ -248,57 +255,113 @@ public class registerChild extends AppCompatActivity {
 
     }
 
-
+    //Register new child onClickListner
     public void registerNewKid(View view) {
         EditText childName = findViewById(R.id.editTextChildNameReg);
         EditText childAge = findViewById(R.id.editTextChildAge);
         String childGender = spinner.getSelectedItem().toString();
         Button childDOB = findViewById(R.id.childDOB);
-        addChildNameToChildActivities(childName.getText().toString());
+        EditText childEmail = findViewById(R.id.childEmail);
+        EditText childPassword = findViewById(R.id.childPassword);
+        EditText childConfirmPassword = findViewById(R.id.childConfirmPassword);
+        addEmailToChildActivities(childEmail.getText().toString());
         String parentId = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        ProgressDialog progressDialog = new ProgressDialog(registerChild.this);
-        progressDialog.setMessage("Please Wait Registration...");
-        progressDialog.setTitle("Registration");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
+        if(childName.getText().toString().equals(null)){
+            childName.setError("Please Enter Name");
+            childName.requestFocus();
+        }
+        else if(childAge.getText().toString().equals(null)){
+            childAge.setError("Please Enter Age");
+            childAge.requestFocus();
+        }else if(spinner.getSelectedItemId() == 0){
+            spinner.requestFocus();
+        }else if(childDOB.getText().toString().equals("Date Of Birth")){
+            childDOB.setError("Please Enter DOB");
+            childDOB.requestFocus();
+        }else if (childEmail.getText().toString().equals(null)){
+            childEmail.setError("Please Select DOB");
+            childEmail.requestFocus();
+        } else if (childPassword.getText().toString().length() < 6){
+            childPassword.setError("Enter Valid Password");
+            childPassword.requestFocus();
+        }else if (!childPassword.getText().toString().equals(childConfirmPassword.getText().toString())){
+            childConfirmPassword.setError("Password doesn't match");
+            childConfirmPassword.requestFocus();
+        }
+        else {
+            ProgressDialog progressDialog = new ProgressDialog(registerChild.this);
+//            progressDialog.setMessage("Please Wait...");
+//            progressDialog.setTitle("Registration");
 
-        Child child = new Child(childName.getText().toString(),
-                childAge.getText().toString(),
-                childDOB.getText().toString(),
-                childGender,
-                parentId,
-                childActivitiesList);
-        DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/")
-                .getReference("Kids")
-                .child(child.getParentId() + child.getChildName());
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
 
-        reference.setValue(child).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()) {
-                    for (int i = 0; i < childActivitiesList.size(); i++)
-                        reference.child("activities").setValue(childActivitiesList.get(i));
-                    progressDialog.dismiss();
-                    Toast.makeText(registerChild.this, "Kid info is successFully added", Toast.LENGTH_LONG).show();
-                    finish();
-                }else {
-                    if (progressDialog.isShowing())
-                        progressDialog.dismiss();
-                    Toast.makeText(registerChild.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            }
-        });
+            Child childUser = new Child(childName.getText().toString(),
+                    childAge.getText().toString(),
+                    childDOB.getText().toString(),
+                    childGender,
+                    parentId,
+                    childEmail.getText().toString(),
+                    childPassword.getText().toString()
+                    );
+
+            // Add Child To firebase auth
+            FirebaseAuth auth = FirebaseAuth.getInstance();
+            auth.createUserWithEmailAndPassword(childUser.getChildEmail(),childUser.getChildPassword())
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+
+                            //Add Child to Children table
+                            DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                                    .getReference("children")
+                                    .child(auth.getCurrentUser().getUid());
+
+                            reference.setValue(childUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+
+                                        //Add Activites to Activity table
+
+
+                                        if(childActivitiesList.size() != 0){
+                                            for (int i = 0; i<childActivitiesList.size();i++) {
+                                                DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                                                        .getReference("Activities")
+                                                        .child(auth.getCurrentUser().getUid() + "|activity"+(i+1) );
+                                                reference.setValue(childActivitiesList.get(i));
+                                            }
+                                            progressDialog.dismiss();
+                                            Toast.makeText(registerChild.this, "Kid info is successFully added", Toast.LENGTH_LONG).show();
+                                            finish();
+                                        }
+
+                                    } else {
+                                        if (progressDialog.isShowing())
+                                            progressDialog.dismiss();
+                                        Toast.makeText(registerChild.this, task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        finish();
+                                    }
+                                }
+                            });
+
+
+                        }
+                    });
+        }
 
 
 
     }
 
-    private void addChildNameToChildActivities(String name) {
-       for (int i = 0; i<childActivitiesList.size();i++)
-           childActivitiesList.get(i).setChildName(name);
+    private void addEmailToChildActivities(String email) {
+        for (int i = 0; i<childActivitiesList.size();i++)
+           childActivitiesList.get(i).setChildEmail(email);
     }
+
+
 }
 
 

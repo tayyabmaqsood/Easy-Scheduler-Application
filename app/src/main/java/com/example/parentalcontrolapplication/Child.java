@@ -71,21 +71,65 @@ public class Child {
 
     private String childName;
 
+
     @Override
     public String toString() {
         return "Child{" +
                 "childName='" + childName + '\'' +
                 ", childAge='" + childAge + '\'' +
                 ", childDOB='" + childDOB + '\'' +
-                ", parentId='" + parentId + '\'' +
                 ", childGender='" + childGender + '\'' +
+                ", childEmail='" + childEmail + '\'' +
+                ", ChildPassword='" + ChildPassword + '\'' +
                 '}';
     }
 
     private String childAge;
     private String childDOB;
     private String parentId;
+
+    public Child(String childName, String childAge, String childDOB, String parentId, String childGender, String childEmail, String childPassword, List<ChildActivities> activities) {
+        this.childName = childName;
+        this.childAge = childAge;
+        this.childDOB = childDOB;
+        this.parentId = parentId;
+        this.childGender = childGender;
+        this.childEmail = childEmail;
+        ChildPassword = childPassword;
+        this.activities = activities;
+    }
+
+    public Child(String childName, String childAge, String childDOB, String childGender, String parentId, String childEmail, String childPassword) {
+        this.childName = childName;
+        this.childAge = childAge;
+        this.childDOB = childDOB;
+        this.parentId = parentId;
+        this.childGender = childGender;
+        this.childEmail = childEmail;
+        ChildPassword = childPassword;
+
+    }
+
     private String childGender;
+    private String childEmail;
+    private String ChildPassword;
+
+    public String getChildEmail() {
+        return childEmail;
+    }
+
+    public void setChildEmail(String childEmail) {
+        this.childEmail = childEmail;
+    }
+
+    public String getChildPassword() {
+        return ChildPassword;
+    }
+
+    public void setChildPassword(String childPassword) {
+        ChildPassword = childPassword;
+    }
+
     private List<ChildActivities>activities =  new ArrayList<ChildActivities>();
 
     public Child(String childName, String childAge, String childDOB,  String childGender, String parentId, List<ChildActivities> activities) {

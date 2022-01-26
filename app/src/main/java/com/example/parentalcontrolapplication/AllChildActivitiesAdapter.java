@@ -40,7 +40,7 @@ public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActi
     public void onBindViewHolder(@NonNull AllChildActivitiesAdapter.ViewHolder holder, int position) {
         int ps = position;
         ChildActivities childActivities = activityList.get(position);
-        holder.textChildName.setText(childActivities.getChildName());
+        //holder.textChildName.setText(childActivities.getChildName());
         holder.textActivityName.setText(childActivities.getChildActivityName());
         holder.textActivityDescription.setText(childActivities.getActivityDescription());
         holder.getTextActivityTime.setText(childActivities.getActivityTime());
