@@ -8,7 +8,7 @@ public class ChildActivities {
     private String activityDescription;
     private String childEmail;
     private String activityStatus;
-    private String completedDate;
+    private String completedDate = "None";
     private String activityId;
 
     public String getActivityId() {

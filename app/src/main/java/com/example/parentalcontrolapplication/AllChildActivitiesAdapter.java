@@ -75,7 +75,7 @@ public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActi
             textChildName = itemView.findViewById(R.id.showChildName);
             textActivityName  = (TextView) itemView.findViewById(R.id.showActivityName);
             textActivityDescription = itemView.findViewById(R.id.showChildActivityDescription);
-            getTextActivityTime = itemView.findViewById(R.id.showChildActivityTime);
+            //getTextActivityTime = itemView.findViewById(R.id.showChildActivityTime);
             getTextActivityDate = itemView.findViewById(R.id.showChildActivityDate);
             linearLayout = itemView.findViewById(R.id.childShowAllRecyclerViewLinearlayout);
 

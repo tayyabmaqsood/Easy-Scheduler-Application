@@ -10,10 +10,12 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -22,8 +24,10 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -60,9 +64,16 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
     private int t1Minute;
     private int dataCountInDb = 0;
     FirebaseAuth auth= FirebaseAuth.getInstance();
+    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         setContentView(R.layout.activity_chlid_action);
         recyclerView = (RecyclerView) findViewById(R.id.childActivitiesIndexRecyclerView);
         // means every item of recyclerview has fixed size
@@ -114,6 +125,7 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
                         childActivity.setActivityStatus(singleShot.child("activityStatus").getValue().toString());
                         childActivity.setChildEmail(singleShot.child("childEmail").getValue().toString());
                         childActivity.setActivityId(singleShot.getKey());
+                        childActivity.setCompletedDate(singleShot.child("completedDate").getValue().toString());
                         childActionActivities.add(childActivity);
 
                         if(!isAlreadyShow) {
@@ -134,6 +146,20 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(this,MainActivity.class));
+        return true;
+    }
 
     // <======================= Filters Activities of the basis of Buttons on ChildActivity.xml=============
 
@@ -234,7 +260,34 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
             itemClicked++;
             if(itemClicked == 2) {
                 //Do thing on double click
+                Dialog dialog = new Dialog(ChlidActionActivity.this,R.style.Base_Theme_AppCompat_DialogWhenLarge);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setCancelable(false);
+                dialog.setContentView(R.layout.showactivity_layout);
 
+                TextView name =  dialog.findViewById(R.id.showActivityName);
+                TextView description =  dialog.findViewById(R.id.showChildActivityDescription);
+                TextView date =  dialog.findViewById(R.id.showChildActivityDate);
+                TextView status =  dialog.findViewById(R.id.showChildActivityStatus);
+                TextView completeDate =  dialog.findViewById(R.id.showChildActivityCompletedDate);
+                Button closeButton = dialog.findViewById(R.id.button_close);
+                closeButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                Log.d("Completed", activity.getCompletedDate());
+                if(activity.getCompletedDate().equals(null) || activity.getCompletedDate().equals("None"))
+                    completeDate.setText("None");
+                else
+                    completeDate.setText(activity.getCompletedDate());
+                name.setText(activity.getChildActivityName());
+                description.setText(activity.getActivityDescription());
+                date.setText(activity.getActivityDate() + " , "+activity.getActivityTime());
+                status.setText(activity.getChildActivityName());
+
+                dialog.show();
 
 
                 itemClicked = 0;
