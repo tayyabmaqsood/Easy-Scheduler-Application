@@ -5,7 +5,7 @@
     <item
         android:icon="@drawable/ic_logout_svgrepo_com__1_"
         android:id="@+id/Logout"
-        android:title="tayyab"
+        android:title="Logout"
         app:showAsAction="ifRoom"
         />
 
