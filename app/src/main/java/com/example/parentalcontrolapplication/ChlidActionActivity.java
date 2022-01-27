@@ -47,9 +47,14 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
     private RecyclerView.Adapter adapter;
     private List<ChildActivities> childActionActivities;
 
-    private  List<ChildActivities> randomList;
+    private  List<ChildActivities> allList;
+    private  List<ChildActivities> todaysList;
+    private  List<ChildActivities> completeList;
     private RecyclerView recyclerViewRandom;
-    private RecyclerView.Adapter adapterRandom;
+    private RecyclerView.Adapter allAdapter;
+    private RecyclerView.Adapter todaysAdapter;
+    private RecyclerView.Adapter completeAdapter;
+    private String tabSelection = "";
 
     private int t1Houre;
     private int t1Minute;
@@ -69,8 +74,13 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
 
 
-        randomList = new ArrayList<>();
-        adapterRandom =  new ChlidActionsAdapter(randomList,this);
+        // Intializing different lists and adapter
+        allList = new ArrayList<>();
+        allAdapter =  new ChlidActionsAdapter(allList,this);
+        todaysList = new ArrayList<>();
+        todaysAdapter =  new ChlidActionsAdapter(todaysList,this);
+        completeList = new ArrayList<>();
+        completeAdapter =  new ChlidActionsAdapter(completeList,this);
 
 
 
@@ -79,6 +89,8 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
         Query query = reference.orderByChild("childEmail").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         query.addValueEventListener(new ValueEventListener() {
+            private View view;
+            boolean isAlreadyShow = false;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 childActionActivities.clear();
@@ -103,8 +115,11 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
                         childActivity.setChildEmail(singleShot.child("childEmail").getValue().toString());
                         childActivity.setActivityId(singleShot.getKey());
                         childActionActivities.add(childActivity);
-                        adapter.notifyDataSetChanged();
 
+                        if(!isAlreadyShow) {
+                            recyclerView.setAdapter(adapter);
+                            isAlreadyShow = true;
+                        }
                     }catch (Exception e){ }
                 }
             }
@@ -122,6 +137,13 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
     // <======================= Filters Activities of the basis of Buttons on ChildActivity.xml=============
 
+    public void updateAllActivitiesList(){
+        allList.clear();
+        allList = getActivitiesToDo();
+        allAdapter = new ChlidActionsAdapter(allList,this,this);
+        recyclerView.setAdapter(allAdapter);
+
+    }
     public void showAllActivities(View view){
         RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
         todoActivity.setBackgroundColor(getResources().getColor(R.color.whiteshade));
@@ -129,14 +151,17 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
         carcard.setBackgroundColor(Color.TRANSPARENT);
         RelativeLayout restcard = findViewById(R.id.completedActivitiesCardView);
         restcard.setBackgroundColor(Color.TRANSPARENT);
-
-        randomList.clear();
-        randomList = getActivitiesToDo();
-        adapter = new ChlidActionsAdapter(randomList,this,this);
-        recyclerView.setAdapter(adapter);
+        tabSelection = "allActivities";
+        updateAllActivitiesList();
 
     }
 
+    public void updateCompleteList(){
+        completeList.clear();
+        completeList = getCompletedActivities();
+        completeAdapter = new ChlidActionsAdapter(completeList,this,this);
+        recyclerView.setAdapter(completeAdapter);
+    }
     public void completedActivities(View view) {
 
         RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
@@ -145,16 +170,16 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
         carcard.setBackgroundColor(Color.TRANSPARENT);
         RelativeLayout restcard = findViewById(R.id.completedActivitiesCardView);
         restcard.setBackgroundColor(getResources().getColor(R.color.whiteshade));
-
-
-        randomList.clear();
-        randomList = getCompletedActivities();
-        adapter = new ChlidActionsAdapter(randomList,this,this);
-        recyclerView.setAdapter(adapter);
-
+        updateCompleteList();
     }
 
+    public void updateTodaysList(){
 
+        todaysList.clear();
+        todaysList = getTodaysActivities();
+        todaysAdapter = new ChlidActionsAdapter(todaysList,this,this);
+        recyclerView.setAdapter(todaysAdapter);
+    }
     public void todaysActivity(View view) {
         RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
         todoActivity.setBackgroundColor(Color.TRANSPARENT);
@@ -162,24 +187,19 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
         carcard.setBackgroundColor(getResources().getColor(R.color.whiteshade));;
         RelativeLayout restcard = findViewById(R.id.completedActivitiesCardView);
         restcard.setBackgroundColor(Color.TRANSPARENT);
-
-
-        randomList.clear();
-        randomList = getTodaysActivities();
-        adapter = new ChlidActionsAdapter(randomList,this,this);
-        recyclerView.setAdapter(adapter);    }
+        tabSelection = "todaysActivities";
+        updateTodaysList();
+ }
 
 
     private List<ChildActivities> getTodaysActivities() {
         List<ChildActivities>list = new ArrayList<ChildActivities>();
         for(int i = 0;i<childActionActivities.size();i++) {
 
-
-            Log.d("Date",childActionActivities.get(i).getActivityDate());
-            Log.d("Date",getTodaysDate());
-
-            if ( childActionActivities.get(i).getActivityDate().equals(getTodaysDate()) && !childActionActivities.get(i).equals("completed"))
-            list.add(childActionActivities.get(i));
+            if ( childActionActivities.get(i).getActivityDate().equals(getTodaysDate())) {
+                if(!childActionActivities.get(i).getActivityStatus().equals("completed"))
+                    list.add(childActionActivities.get(i));
+            }
         }
         return list;
     }
@@ -213,8 +233,8 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
         if (clickedEmail.equals(activity.getChildEmail())) {
             itemClicked++;
             if(itemClicked == 2) {
-
                 //Do thing on double click
+
 
 
                 itemClicked = 0;
@@ -224,6 +244,7 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
         else {
             clickedEmail = activity.getChildEmail();
             itemClicked = 1;
+            Toast.makeText(this, "Press one more time to see full activity", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -233,6 +254,7 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
     @Override
     public void onItemLongClicked(ChildActivities activity) {
         if(!activity.getActivityStatus().equals("completed")) {
+            activity.setCompletedDate(getTodaysDate());
             AlertDialog.Builder builder = new AlertDialog.Builder(ChlidActionActivity.this);
             builder.setMessage("Are you sure?");
             builder.setTitle("Mark Activity as Complete!");
@@ -250,7 +272,14 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         snapshot.getRef().child("activityStatus").setValue("completed");
-                                        adapter.notifyDataSetChanged();
+                                        snapshot.getRef().child("completedDate").setValue(getTodaysDate());
+                                        if(tabSelection.equals("allActivities")) {
+                                            updateAllActivitiesList();
+                                        }
+                                        else if (tabSelection.equals("todaysActivities"))
+                                            updateTodaysList();
+                                        else
+                                            adapter.notifyDataSetChanged();
                                         Toast.makeText(ChlidActionActivity.this, "Activity Successfully updated", Toast.LENGTH_SHORT).show();
                                     }
 
@@ -444,6 +473,7 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
                         childActivity.setChildActivityName(ActivityName);
                         childActivity.setActivityStatus("pending");
                         childActivity.setChildEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                        childActivity.setCompletedDate("None");
                         //Add Data To firebase
 
 
@@ -453,7 +483,11 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
                                 .child(auth.getCurrentUser().getUid() + "|activity"+(dataCountInDb+1));
                         reference.setValue(childActivity);
                         childActionActivities.add(childActivity);
-                        adapter.notifyDataSetChanged();
+
+                        if (tabSelection.equals("todaysActivities"))
+                            updateTodaysList();
+                        else
+                            updateAllActivitiesList();
 
                         Toast.makeText(ChlidActionActivity.this, "Activity Successfully added", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
