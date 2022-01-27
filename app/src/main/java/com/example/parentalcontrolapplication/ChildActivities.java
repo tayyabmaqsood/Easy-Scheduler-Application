@@ -8,6 +8,24 @@ public class ChildActivities {
     private String activityDescription;
     private String childEmail;
     private String activityStatus;
+    private String completedDate;
+    private String activityId;
+
+    public String getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(String activityId) {
+        this.activityId = activityId;
+    }
+
+    public String getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(String completedDate) {
+        this.completedDate = completedDate;
+    }
 
     public String getActivityStatus() {
         return activityStatus;

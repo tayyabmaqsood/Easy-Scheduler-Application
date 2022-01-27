@@ -1,18 +1,32 @@
 package com.example.parentalcontrolapplication;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,6 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -36,8 +51,10 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
     private RecyclerView recyclerViewRandom;
     private RecyclerView.Adapter adapterRandom;
 
-
-
+    private int t1Houre;
+    private int t1Minute;
+    private int dataCountInDb = 0;
+    FirebaseAuth auth= FirebaseAuth.getInstance();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +85,7 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
 
                 Iterator shots = snapshot.getChildren().iterator();
-
+                dataCountInDb = (int)snapshot.getChildrenCount();
                 while (shots.hasNext()) {
 
 
@@ -84,7 +101,7 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
                         childActivity.setActivityDate(singleShot.child("activityDate").getValue().toString());
                         childActivity.setActivityStatus(singleShot.child("activityStatus").getValue().toString());
                         childActivity.setChildEmail(singleShot.child("childEmail").getValue().toString());
-                        Log.d("str",childActivity.toString());
+                        childActivity.setActivityId(singleShot.getKey());
                         childActionActivities.add(childActivity);
                         adapter.notifyDataSetChanged();
 
@@ -102,6 +119,9 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
     }
 
+
+    // <======================= Filters Activities of the basis of Buttons on ChildActivity.xml=============
+
     public void showAllActivities(View view){
         RelativeLayout todoActivity = findViewById(R.id.allActivitiesCardView);
         todoActivity.setBackgroundColor(getResources().getColor(R.color.whiteshade));
@@ -112,8 +132,8 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
         randomList.clear();
         randomList = getActivitiesToDo();
-        adapterRandom = new ChlidActionsAdapter(randomList,this,this);
-        recyclerView.setAdapter(adapterRandom);
+        adapter = new ChlidActionsAdapter(randomList,this,this);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -129,8 +149,8 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
         randomList.clear();
         randomList = getCompletedActivities();
-        adapterRandom = new ChlidActionsAdapter(randomList,this,this);
-        recyclerView.setAdapter(adapterRandom);
+        adapter = new ChlidActionsAdapter(randomList,this,this);
+        recyclerView.setAdapter(adapter);
 
     }
 
@@ -146,20 +166,20 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
         randomList.clear();
         randomList = getTodaysActivities();
-        adapterRandom = new ChlidActionsAdapter(randomList,this,this);
-        recyclerView.setAdapter(adapterRandom);    }
+        adapter = new ChlidActionsAdapter(randomList,this,this);
+        recyclerView.setAdapter(adapter);    }
 
 
     private List<ChildActivities> getTodaysActivities() {
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date today = new Date();
-
         List<ChildActivities>list = new ArrayList<ChildActivities>();
         for(int i = 0;i<childActionActivities.size();i++) {
-            if (childActionActivities.get(i).getActivityDate().equals(formatter.format(today))) ;
+
+
+            Log.d("Date",childActionActivities.get(i).getActivityDate());
+            Log.d("Date",getTodaysDate());
+
+            if ( childActionActivities.get(i).getActivityDate().equals(getTodaysDate()) && !childActionActivities.get(i).equals("completed"))
             list.add(childActionActivities.get(i));
-            Log.d("DATE cal",formatter.format(today));
-            Log.d("Date ACT",childActionActivities.get(i).getActivityDate());
         }
         return list;
     }
@@ -180,11 +200,11 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
             if (childActionActivities.get(i).getActivityStatus().equals("completed"))
                 list.add(childActionActivities.get(i));
         }
-        Log.d("SIZE",Integer.toString(list.size()));
         return list;
     }
 
 
+    // <<<<<<<<< ========== Recycler View ClickListners ================== >>>>>>>>>>>>>
     // Double Select item from recycler view
     private String clickedEmail = "";
     private int itemClicked = 0;
@@ -194,7 +214,9 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
             itemClicked++;
             if(itemClicked == 2) {
 
-                Toast.makeText(this, "double click", Toast.LENGTH_SHORT).show();
+                //Do thing on double click
+
+
                 itemClicked = 0;
                 clickedEmail = "";
             }
@@ -206,8 +228,243 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
     }
 
+    //<<<<<<<<<<<<<<< ===================== Long Item Clicked Listner ====================>>>>>>>
+
     @Override
     public void onItemLongClicked(ChildActivities activity) {
-        Toast.makeText(this, "multiple time click", Toast.LENGTH_SHORT).show();
+        if(!activity.getActivityStatus().equals("completed")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChlidActionActivity.this);
+            builder.setMessage("Are you sure?");
+            builder.setTitle("Mark Activity as Complete!");
+            builder.setCancelable(false);
+            builder.setPositiveButton(
+                    "Complete",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            try {
+
+                                String childId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                                DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("Activities");
+                                reference.child(activity.getActivityId()).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        snapshot.getRef().child("activityStatus").setValue("completed");
+                                        adapter.notifyDataSetChanged();
+                                        Toast.makeText(ChlidActionActivity.this, "Activity Successfully updated", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Log.d("Child",error.getMessage());
+                                    }
+
+                                });
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+            );
+            builder.setNegativeButton(
+                    "Dismis",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    }
+            );
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
+
+
+    Button dateDialogButton;
+    DatePickerDialog datePickerDialog;
+    private String getTodaysDate() {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        month = month + 1;
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        return makeDateString(day,month,year);
+    }
+    private void initDatePicker() {
+        DatePickerDialog.OnDateSetListener dateSetListner = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month+=1;
+                String date = makeDateString(day,month,year);
+                dateDialogButton.setText(date);
+            }
+        };
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        int style = android.app.AlertDialog.THEME_HOLO_LIGHT;
+        datePickerDialog = new DatePickerDialog(this,style,dateSetListner,year,month,day);
+    }
+
+
+    private String makeDateString(int day, int month, int year) {
+        return day+" - "+getmonthFormate(month)+" - "+year;
+    }
+    private String getmonthFormate(int month) {
+        if(month == 1)
+            return "Jan";
+        if(month == 2)
+            return "Feb";
+        if(month == 3)
+            return "March";
+        if(month == 4)
+            return "April";
+        if(month == 5)
+            return "May";
+        if(month == 6)
+            return "June";
+        if(month == 7)
+            return "July";
+        if(month == 8)
+            return "Aug";
+        if(month == 9)
+            return "Sept";
+        if(month == 10)
+            return "Oct";
+        if(month == 11)
+            return "Nov";
+        if(month == 12)
+            return "Dec";
+        return "Jan";
+    }
+    public void openDatePicker(View view) {
+        datePickerDialog.show();
+    }
+
+    //<<<============= Code For Self adding into activiy =========== >>>>>>>>
+    public void addActivityForSelf(View view) {
+            String activityName;
+            Dialog dialog = new Dialog(ChlidActionActivity.this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.child_activities);
+
+            Button timePickerBtn = dialog.findViewById(R.id.childActivityTime);
+
+            //Activity Selection Spinner
+            Spinner spinnerActivityName =  dialog.findViewById(R.id.childActivitySelection);
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.childActivities, android.R.layout.simple_spinner_item);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerActivityName.setAdapter(adapter);
+
+            //Description, Date, Time
+            EditText description = dialog.findViewById(R.id.childActivityDescription);
+            Button date = dialog.findViewById(R.id.childActivityDate);
+            Button time = dialog.findViewById(R.id.childActivityTime);
+
+            //<=================== Time Picker Code
+            timePickerBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(
+                            ChlidActionActivity.this,
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                                    t1Houre = i;
+                                    t1Minute = i1;
+
+                                    Calendar calendar = Calendar.getInstance();
+                                    calendar.set(0,0,0,t1Houre,t1Minute);
+                                    timePickerBtn.setText(DateFormat.format("hh:mm aa",calendar));
+                                }
+                            },12,0,false
+
+                    );
+                    timePickerDialog.updateTime(t1Houre,t1Minute);
+                    timePickerDialog.show();
+                }
+            });
+
+
+            // Cancel button click Listner
+            Button cancelBtn = dialog.findViewById(R.id.cancelRegisterActivity);
+            cancelBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog.dismiss();
+                }
+            });
+
+            // <<<=================== Add Date chlid activity listner ======================>>>>>>
+            // Date Selector =====================================>
+            dateDialogButton = dialog.findViewById(R.id.childActivityDate);
+            dateDialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    initDatePicker();
+                    datePickerDialog.show();
+                }
+            });
+
+
+            // Add chlid activities button listner
+            Button addChildActivity = dialog.findViewById(R.id.addChildActivity);
+            addChildActivity.setOnClickListener(new View.OnClickListener() {
+                @Override
+
+                public void onClick(View view) {
+                    if(spinnerActivityName.getSelectedItemId() == 0){
+                    }
+                    else if(description.getText().length() == 0) {
+                        description.setError("Enter valid description");
+                        description.requestFocus();
+                    }
+                    else if(date.getText().equals("Select Date")){
+                        date.setError("Select Date");
+                        date.requestFocus();
+                    }
+                    else if(time.getText().equals("Select Time")){
+                        time.setError("Select Time");
+                        time.requestFocus();
+                    }
+                    else {
+                        ChildActivities childActivity = new ChildActivities();
+                        String ActivityName = spinnerActivityName.getSelectedItem().toString();
+                        String desc = description.getText().toString();
+                        String ActivityDate = date.getText().toString();
+                        String ActivityTime = time.getText().toString();
+                        childActivity.setActivityDate(ActivityDate);
+                        childActivity.setActivityTime(ActivityTime);
+                        childActivity.setActivityDescription(desc);
+                        childActivity.setChildActivityName(ActivityName);
+                        childActivity.setActivityStatus("pending");
+                        childActivity.setChildEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                        //Add Data To firebase
+
+
+                        DatabaseReference reference = FirebaseDatabase.getInstance("https://parental-control-applica-de957-default-rtdb.asia-southeast1.firebasedatabase.app/")
+                                .getReference("Activities")
+
+                                .child(auth.getCurrentUser().getUid() + "|activity"+(dataCountInDb+1));
+                        reference.setValue(childActivity);
+                        childActionActivities.add(childActivity);
+                        adapter.notifyDataSetChanged();
+
+                        Toast.makeText(ChlidActionActivity.this, "Activity Successfully added", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }
+            });
+
+            dialog.show();
+
+
+        }
+
+
 }
