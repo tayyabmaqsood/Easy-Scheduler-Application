@@ -8,21 +8,24 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActivitiesAdapter.ViewHolder>{
     private Context context;
     private List<ChildActivities> activityList;
-    private AllChildActivitiesInterface listner;
+    private childActionSelectListner listner;
 
     public AllChildActivitiesAdapter( List<ChildActivities> activityList,Context context) {
         this.context = context;
         this.activityList = activityList;
     }
 
-    public AllChildActivitiesAdapter(List<ChildActivities> activityList, Context context, AllChildActivitiesInterface listner) {
+    public AllChildActivitiesAdapter(List<ChildActivities> activityList, Context context, childActionSelectListner listner) {
         this.activityList = activityList;
         this.context = context;
         this.listner = listner;
@@ -32,27 +35,23 @@ public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActi
     @Override
     public AllChildActivitiesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.showactivity_layout,parent,false);
+                .inflate(R.layout.childactivitydetails_layout,parent,false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AllChildActivitiesAdapter.ViewHolder holder, int position) {
         int ps = position;
-        ChildActivities childActivities = activityList.get(position);
-        //holder.textChildName.setText(childActivities.getChildName());
-        holder.textActivityName.setText(childActivities.getChildActivityName());
-        holder.textActivityDescription.setText(childActivities.getActivityDescription());
-        holder.getTextActivityTime.setText(childActivities.getActivityTime());
-        holder.getTextActivityDate.setText(childActivities.getActivityDate());
-//        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-//
-//                listner.onItemLongClicked(activityList.get(ps));
-//                return false;
-//            }
-//        });
+        ChildActivities childActivity = activityList.get(position);
+        holder.activityName.setText(childActivity.getChildName());
+        holder.activityDateTime.setText(childActivity.getChildEmail());
+        holder.activityDescription.setText(childActivity.getActivityDescription());
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listner.onItemClicked(activityList.get(ps));
+            }
+        });
     }
 
 
@@ -62,22 +61,18 @@ public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActi
     }
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        private  TextView textChildName;
-        private TextView textActivityName;
-        private TextView textActivityDescription;
-        private TextView getTextActivityTime;
-        private TextView getTextActivityDate;
-        private LinearLayout linearLayout;
+        private TextView activityName;
+        private TextView activityDateTime;
+        private TextView activityDescription;
+        private CardView cardView;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            textChildName = itemView.findViewById(R.id.showChildName);
-            textActivityName  = (TextView) itemView.findViewById(R.id.showActivityName);
-            textActivityDescription = itemView.findViewById(R.id.showChildActivityDescription);
-            //getTextActivityTime = itemView.findViewById(R.id.showChildActivityTime);
-            getTextActivityDate = itemView.findViewById(R.id.showChildActivityDate);
-            linearLayout = itemView.findViewById(R.id.childShowAllRecyclerViewLinearlayout);
+            activityName = itemView.findViewById(R.id.activityName);
+            activityDateTime = itemView.findViewById(R.id.activityEmail);
+            activityDescription = itemView.findViewById(R.id.activityDescription);
+            cardView = itemView.findViewById(R.id.childactivitydetails);
 
         }
     }

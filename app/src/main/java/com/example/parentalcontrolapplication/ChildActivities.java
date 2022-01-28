@@ -10,6 +10,15 @@ public class ChildActivities {
     private String activityStatus;
     private String completedDate = "None";
     private String activityId;
+    private String childName;
+
+    public String getChildName() {
+        return childName;
+    }
+
+    public void setChildName(String childName) {
+        this.childName = childName;
+    }
 
     public String getActivityId() {
         return activityId;
