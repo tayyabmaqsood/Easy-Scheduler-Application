@@ -74,12 +74,13 @@ public class ParentsActivity extends AppCompatActivity{
 
 
     public void showPersonInfo(View view) {
+        startActivity(new Intent(this, RegisteredChildrenActivity.class));
+    }
+    public void showAllChildActivities(View view) {
         try {
             startActivity(new Intent(this, AllChildActivitiesIndex.class));
 
         }catch (Exception e)
         { Log.d("Exception", e.getMessage().toString());}
-    }
-    public void showAllChildActivities(View view) {
     }
 }

@@ -4,14 +4,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
@@ -69,7 +66,7 @@ public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            activityName = itemView.findViewById(R.id.activityName);
+            activityName = itemView.findViewById(R.id.personName);
             activityDateTime = itemView.findViewById(R.id.activityEmail);
             activityDescription = itemView.findViewById(R.id.activityDescription);
             cardView = itemView.findViewById(R.id.childactivitydetails);
