@@ -106,7 +106,7 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
         TextView gender = dialog.findViewById(R.id.personsGenderTextview);
         TextView email = dialog.findViewById(R.id.personsEmailTextView);
         TextView dob = dialog.findViewById(R.id.personsDobTextview);
-        Log.d("Str", child.getChildName());
+
 
         // Full Info Recycler view.........../
         fullInfoRecyclerView = (RecyclerView) dialog.findViewById(R.id.showActivitiesRecyclerView);
@@ -141,12 +141,8 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
                 childActionActivities.clear();
                 Iterator shots = snapshot.getChildren().iterator();
                 dataCountInDb = (int) snapshot.getChildrenCount();
-                Log.d("String",Integer.toString(dataCountInDb));
                 while (shots.hasNext()) {
-
                     DataSnapshot singleShot = (DataSnapshot) shots.next();
-                    Log.d("Activities RecyclerView", singleShot.toString());
-                    Log.d("ChildEmail",child.getChildEmail());
                     ChildActivities childActivity = new ChildActivities();
 
                     try {
@@ -286,7 +282,7 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
                                                     .child( child.getChildId()+"|activity"+(dataCountInDb+1));
                                             reference.setValue(childActivity);
                                             childActionActivities.add(childActivity);
-                                            recyclerView.setAdapter(fullInfoAdapter);
+                                            fullInfoRecyclerView.setAdapter(fullInfoAdapter);
                                         }
 
                                         @Override
@@ -294,7 +290,6 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
                                             Toast.makeText(RegisteredChildrenActivity.this, error.getMessage().toString(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
-
 
                             Toast.makeText(RegisteredChildrenActivity.this, "Activity Successfully added", Toast.LENGTH_SHORT).show();
                             dialog2.dismiss();
@@ -306,14 +301,11 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
             }
         });
 
-
-
-
         dialog.show();
 
     }
 
-    public void addNewChild(View view) {
+    public void addNewChildParentIndexView(View view) {
         startActivity(new Intent(this, registerChild.class));
     }
 
@@ -323,7 +315,6 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.showactivity_layout);
-
         TextView name =  dialog.findViewById(R.id.showActivityName);
         TextView description =  dialog.findViewById(R.id.showChildActivityDescription);
         TextView date =  dialog.findViewById(R.id.showChildActivityDate);

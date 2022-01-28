@@ -197,6 +197,7 @@ public class registerChild extends AppCompatActivity {
             public void onClick(View view) {
                 dialog.dismiss();
                 dateDialogButton = null;
+                initDatePicker();
             }
         });
 
@@ -244,6 +245,7 @@ public class registerChild extends AppCompatActivity {
 
                         childActivitiesList.add(childActivity);
                         activitiesAdpater.notifyDataSetChanged();
+                        dateDialogButton = null;
                         dialog.dismiss();
                 }
             }
@@ -290,8 +292,8 @@ public class registerChild extends AppCompatActivity {
         }
         else {
             ProgressDialog progressDialog = new ProgressDialog(registerChild.this);
-//            progressDialog.setMessage("Please Wait...");
-//            progressDialog.setTitle("Registration");
+            progressDialog.setMessage("Please Wait...");
+            progressDialog.setTitle("Registration");
 
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
@@ -335,6 +337,10 @@ public class registerChild extends AppCompatActivity {
                                             progressDialog.dismiss();
                                             Toast.makeText(registerChild.this, "Kid info is successFully added", Toast.LENGTH_LONG).show();
                                             finish();
+                                        }else{
+                                            progressDialog.dismiss();
+                                            Toast.makeText(registerChild.this, "Only Kids info successFully added", Toast.LENGTH_LONG).show();
+                                            finish();
                                         }
 
                                     } else {
@@ -350,7 +356,6 @@ public class registerChild extends AppCompatActivity {
                         }
                     });
         }
-
 
 
     }

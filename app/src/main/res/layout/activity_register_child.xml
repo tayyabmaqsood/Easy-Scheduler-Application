@@ -161,9 +161,9 @@
                 android:ems="10"
                 android:hint="Confirm Password"
                 android:inputType="textPassword"
-                android:paddingLeft="20dp"
+                android:paddingLeft="25dp"
                 android:paddingTop="13dp"
-                android:paddingRight="20dp"
+                android:paddingRight="25dp"
                 android:paddingBottom="13dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
@@ -172,34 +172,36 @@
 
             <Button
                 android:id="@+id/childActivities"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
                 android:background="@drawable/input_bg"
                 android:onClick="addActivitiesForChild"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
                 android:text="Add Activities"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/childConfirmPassword" />
 
             <Button
                 android:id="@+id/childRegisterBtn"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="24dp"
                 android:background="@drawable/input_bg"
+                android:backgroundTint="@color/teal_700"
                 android:onClick="registerNewKid"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
                 android:text="Register"
+                android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/childActivities" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/childActivities"
+                app:layout_constraintTop_toBottomOf="@+id/childConfirmPassword" />
 
             <ListView
                 android:id="@+id/activitiesListView"
