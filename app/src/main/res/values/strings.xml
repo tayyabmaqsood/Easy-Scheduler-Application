@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Parental Control Application</string>
+    <string name="app_name">Easy Schedule</string>
     <string-array name="userTypeArray">
         <item>Select</item>
         <item>Parent</item>
