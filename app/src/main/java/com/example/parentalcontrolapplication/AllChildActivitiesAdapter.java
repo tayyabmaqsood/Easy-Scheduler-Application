@@ -41,7 +41,7 @@ public class AllChildActivitiesAdapter extends RecyclerView.Adapter<AllChildActi
         int ps = position;
         ChildActivities childActivity = activityList.get(position);
         holder.activityName.setText(childActivity.getChildName());
-        holder.activityDateTime.setText(childActivity.getChildEmail());
+        holder.activityDateTime.setText(childActivity.getChildActivityName());
         holder.activityDescription.setText(childActivity.getActivityDescription());
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

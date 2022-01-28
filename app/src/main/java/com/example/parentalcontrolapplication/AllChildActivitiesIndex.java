@@ -82,7 +82,6 @@ public class AllChildActivitiesIndex extends AppCompatActivity implements childA
                                             while (Sshots.hasNext()) {
                                                 DataSnapshot SsingleShot = (DataSnapshot) Sshots.next();
                                                 ChildActivities childActivity = new ChildActivities();
-
                                                 try {
                                                     childActivity.setChildActivityName(SsingleShot.child("childActivityName").getValue().toString());
                                                     childActivity.setActivityDescription(SsingleShot.child("activityDescription").getValue().toString());
@@ -95,8 +94,8 @@ public class AllChildActivitiesIndex extends AppCompatActivity implements childA
                                                     childActivity.setChildName(singleShot.child("childName").getValue().toString());
                                                     childActionActivities.add(childActivity);
 
-                                                    adapter = new AllChildActivitiesAdapter(childActionActivities, AllChildActivitiesIndex.this, AllChildActivitiesIndex.this);
-                                                    recyclerView.setAdapter(adapter);
+//                                                    adapter = new AllChildActivitiesAdapter(childActionActivities, AllChildActivitiesIndex.this, AllChildActivitiesIndex.this);
+//                                                    recyclerView.setAdapter(adapter);
                                                     if (!isAlreadyShow) {
                                                         recyclerView.setAdapter(adapter);
                                                         isAlreadyShow = true;

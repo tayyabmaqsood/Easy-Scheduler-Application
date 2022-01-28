@@ -28,7 +28,7 @@
             android:layout_gravity="top|right"
             android:layout_marginTop="2dp"
             android:layout_marginRight="2dp"
-            android:background="@drawable/ic_close"
+            android:background="@drawable/ic_baseline_close_24"
             android:clickable="true"
             android:onClick="destroyActivity"
             android:textColor="@color/black" />

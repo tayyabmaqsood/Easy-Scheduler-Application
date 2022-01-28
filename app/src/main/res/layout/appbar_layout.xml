@@ -16,7 +16,7 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar2"
+                android:id="@+id/mytoolbar"
                 app:menu="@menu/actionbar_menu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

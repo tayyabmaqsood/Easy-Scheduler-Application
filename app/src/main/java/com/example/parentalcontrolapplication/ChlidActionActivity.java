@@ -3,6 +3,7 @@ package com.example.parentalcontrolapplication;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +17,8 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.ArrayAdapter;
@@ -27,10 +30,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,10 +39,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -71,8 +70,6 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
         super.onCreate(savedInstanceState);
 
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         setContentView(R.layout.activity_chlid_action);
         recyclerView = (RecyclerView) findViewById(R.id.childActivitiesIndexRecyclerView);
@@ -144,20 +141,23 @@ public class ChlidActionActivity extends AppCompatActivity implements  childActi
 
 
 
+       toolbar = (Toolbar) findViewById(R.id.mytoolbar);
+        setSupportActionBar(toolbar);
     }
-
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.actionbar_menu, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.actionbar_menu, menu);
         return true;
     }
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         Toast.makeText(this, "Logout", Toast.LENGTH_SHORT).show();
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(this,MainActivity.class));
+        finish();
         return true;
     }
 
