@@ -40,10 +40,13 @@ public class PersonInfoAdapter extends RecyclerView.Adapter<PersonInfoAdapter.Vi
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            //    holder.cardView.setBackground(context.getDrawable(R.color.teal_700));
                 listner.clickedItem(childList.get(ps));
             }
         });
+
     }
+
 
     @Override
     public int getItemCount() {

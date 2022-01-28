@@ -2,6 +2,7 @@ package com.example.parentalcontrolapplication;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -67,6 +68,8 @@ public class RegisteredChildrenActivity extends AppCompatActivity implements per
     @Override
     public void clickedItem(Child child) {
         Toast.makeText(RegisteredChildrenActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+        CardView cardView = findViewById(R.id.personalInfoCardView);
+
     }
 
     public void addNewChild(View view) {
