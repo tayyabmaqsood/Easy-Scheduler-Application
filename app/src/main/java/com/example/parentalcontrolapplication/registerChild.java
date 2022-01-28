@@ -10,7 +10,6 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -261,7 +260,7 @@ public class registerChild extends AppCompatActivity {
         EditText childAge = findViewById(R.id.editTextChildAge);
         String childGender = spinner.getSelectedItem().toString();
         Button childDOB = findViewById(R.id.childDOB);
-        EditText childEmail = findViewById(R.id.childEmail);
+        EditText childEmail = findViewById(R.id.personsEmail);
         EditText childPassword = findViewById(R.id.childPassword);
         EditText childConfirmPassword = findViewById(R.id.childConfirmPassword);
         addEmailToChildActivities(childEmail.getText().toString());

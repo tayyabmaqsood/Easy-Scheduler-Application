@@ -61,7 +61,7 @@
 
 
             <EditText
-                android:id="@+id/childEmail"
+                android:id="@+id/personsEmail"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="24dp"
@@ -103,7 +103,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/childEmail" />
+                app:layout_constraintTop_toBottomOf="@+id/personsEmail" />
 
 
             <Button

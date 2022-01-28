@@ -70,7 +70,15 @@ public class Child {
     }
 
     private String childName;
+    private String childId;
 
+    public String getChildId() {
+        return childId;
+    }
+
+    public void setChildId(String childId) {
+        this.childId = childId;
+    }
 
     @Override
     public String toString() {
